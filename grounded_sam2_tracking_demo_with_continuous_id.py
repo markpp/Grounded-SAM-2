@@ -44,10 +44,15 @@ grounding_model = AutoModelForZeroShotObjectDetection.from_pretrained(model_id).
 
 # setup the input image and text prompt for SAM 2 and Grounding DINO
 # VERY important: text queries need to be lowercased + end with a dot
-text = "car."
+if 0:
+    text = "car."
+    # `video_dir` a directory of JPEG frames with filenames like `<frame_index>.jpg`  
+    video_dir = "notebooks/videos/car"
 
-# `video_dir` a directory of JPEG frames with filenames like `<frame_index>.jpg`  
-video_dir = "notebooks/videos/car"
+if 1:
+    text = "lego."
+    video_dir = "custom_video_frames/"
+
 # 'output_dir' is the directory to save the annotated frames
 output_dir = "./outputs"
 # 'output_video_path' is the path to save the final video
@@ -95,8 +100,8 @@ for start_frame_idx in range(0, len(frame_names), step):
     results = processor.post_process_grounded_object_detection(
         outputs,
         inputs.input_ids,
-        box_threshold=0.25,
-        text_threshold=0.25,
+        box_threshold=0.35,
+        text_threshold=0.35,
         target_sizes=[image.size[::-1]]
     )
 
@@ -156,7 +161,9 @@ for start_frame_idx in range(0, len(frame_names), step):
     video_segments = {}  # output the following {step} frames tracking masks
     for out_frame_idx, out_obj_ids, out_mask_logits in video_predictor.propagate_in_video(inference_state, max_frame_num_to_track=step, start_frame_idx=start_frame_idx):
         frame_masks = MaskDictionatyModel()
-        
+
+        #print("frame", out_frame_idx, out_mask_logits.max())
+
         for i, out_obj_id in enumerate(out_obj_ids):
             out_mask = (out_mask_logits[i] > 0.0) # .cpu().numpy()
             object_info = ObjectInfo(instance_id = out_obj_id, mask = out_mask[0], class_name = mask_dict.get_target_class_name(out_obj_id))

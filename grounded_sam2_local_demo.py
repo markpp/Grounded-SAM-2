@@ -28,8 +28,18 @@ grounding_model = load_model(
 
 # setup the input image and text prompt for SAM 2 and Grounding DINO
 # VERY important: text queries need to be lowercased + end with a dot
-text = "car. tire."
-img_path = 'notebooks/images/truck.jpg'
+if 0:
+    text = "car. tire."
+    img_path = 'notebooks/images/truck.jpg'
+if 0:
+    text = "lego."
+    img_path = 'assets/lego/frame_22.png'
+if 0:
+    text = "lego."
+    img_path = 'assets/lego/IMG_1934.jpeg'
+if 1:
+    text = "lego."
+    img_path = 'assets/lego/IMG_1936.jpeg'
 
 image_source, image = load_image(img_path)
 
@@ -98,8 +108,8 @@ annotated_frame = box_annotator.annotate(scene=img.copy(), detections=detections
 
 label_annotator = sv.LabelAnnotator()
 annotated_frame = label_annotator.annotate(scene=annotated_frame, detections=detections, labels=labels)
-cv2.imwrite("groundingdino_annotated_image.jpg", annotated_frame)
+#cv2.imwrite(img_path.replace('.','_groundingdino.'), annotated_frame)
 
 mask_annotator = sv.MaskAnnotator()
 annotated_frame = mask_annotator.annotate(scene=annotated_frame, detections=detections)
-cv2.imwrite("grounded_sam2_annotated_image_with_mask.jpg", annotated_frame)
+cv2.imwrite(img_path.replace('.','_grounded_sam2.'), annotated_frame)

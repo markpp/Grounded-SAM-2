@@ -16,10 +16,17 @@ from utils.video_utils import create_video_from_images
 """
 Hyperparam for Ground and Tracking
 """
+# VERY important: text queries need to be lowercased + end with a dot
+
 MODEL_ID = "IDEA-Research/grounding-dino-tiny"
-VIDEO_PATH = "./assets/hippopotamus.mp4"
-TEXT_PROMPT = "hippopotamus."
-OUTPUT_VIDEO_PATH = "./hippopotamus_tracking_demo.mp4"
+if 0:
+    VIDEO_PATH = "./assets/hippopotamus.mp4"
+    TEXT_PROMPT = "hippopotamus."
+    OUTPUT_VIDEO_PATH = "./hippopotamus_tracking_demo.mp4"
+if 1:
+    VIDEO_PATH = "./assets/lego/Slopes_arcs_and_rainbows-12.mp4"
+    TEXT_PROMPT = "lego."
+    OUTPUT_VIDEO_PATH = "./Slopes_arcs_and_rainbows-12.mp4"
 SOURCE_VIDEO_FRAME_DIR = "./custom_video_frames"
 SAVE_TRACKING_RESULTS_DIR = "./tracking_results"
 PROMPT_TYPE_FOR_VIDEO = "box" # choose from ["point", "box", "mask"]
